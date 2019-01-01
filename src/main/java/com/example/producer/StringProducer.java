@@ -30,20 +30,18 @@ public class StringProducer {
     }
 
     /**
-     * 生产1000条消息。
+     * 生产1消息。
      * 生产后需要关闭producer。
      */
-    public void produce(){
-        for(int i=0;i<10;i++){
-            producer.send(new ProducerRecord<>("gao","2019,hello:"+i),(meta,exception)->{
-                Optional.ofNullable(meta).ifPresent(data->{
-                    LOGGER.info("partition:{},offset:{}",data.partition(),data.offset());
-                });
-                Optional.ofNullable(exception).ifPresent(ex->{
-                    LOGGER.error("发生错误:{}",ex);
-                });
+    public void produce(String topic,String value){
+        producer.send(new ProducerRecord<>(topic,value),(meta,exception)->{
+            Optional.ofNullable(meta).ifPresent(data->{
+                LOGGER.info("partition:{},offset:{}",data.partition(),data.offset());
             });
-        }
+            Optional.ofNullable(exception).ifPresent(ex->{
+                LOGGER.error("发生错误:{}",ex);
+            });
+        });
     }
 
     /**
